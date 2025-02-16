@@ -22,7 +22,14 @@ interface PageParams {
   username: string;
 }
 
-export default async function UserProfilePage({ params }: { params: PageParams }) {
+interface PageProps {
+  params: PageParams;
+  searchParams?: { [key: string]: string | string[] | undefined };
+}
+
+
+export default async function UserProfilePage({ params }: PageProps) {
+
   const user = await getUserByUsername(params.username);
 
   if (!user) {
