@@ -5,6 +5,7 @@ import EventCard from "@/components/event-card";
 
 
 
+
 export default function EventsPage() {
   return (
     <Suspense fallback={<div className="flex items-center justify-center h-[50vh]">
@@ -30,10 +31,11 @@ async function Events() {
     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {events.map((event) => (
         <EventCard 
-          key={event.id} 
-          event={event} 
-          username={username ?? "Unknown"} 
-        />
+        key={event.id} 
+        event={{ ...event, description: event.description ?? "" }} 
+        username={username ?? "Unknown"} 
+      />
+      
       ))}
     </div>
   );

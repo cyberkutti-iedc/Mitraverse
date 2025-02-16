@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   Drawer,
@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import EventForm from './event-form';
 
-export default function CreateEventDrawer() {
+function CreateEventDrawerContent() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -24,15 +24,6 @@ export default function CreateEventDrawer() {
       setIsOpen(true);
     }
   }, [searchParams]);
-
-  // State can be exposed to our app in case we want to manually open the drawer 👇
-  // useEffect(() => {
-  //   window.openCreateEventDrawer = () => setIsOpen(true);
-
-  //   return () => {
-  //     delete window.openCreateEventDrawer;
-  //   };
-  // }, []);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -47,11 +38,7 @@ export default function CreateEventDrawer() {
         <DrawerHeader>
           <DrawerTitle>Create New Event</DrawerTitle>
         </DrawerHeader>
-        <EventForm
-          onSubmitForm={() => {
-            handleClose();
-          }}
-        />
+        <EventForm onSubmitForm={handleClose} />
         <DrawerFooter className="px-6">
           <DrawerClose asChild>
             <Button variant="outline" onClick={handleClose}>
@@ -61,5 +48,13 @@ export default function CreateEventDrawer() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  );
+}
+
+export default function CreateEventDrawer() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateEventDrawerContent />
+    </Suspense>
   );
 }
